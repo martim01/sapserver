@@ -68,25 +68,26 @@
 			<Add option="-DASIO_STANDALONE" />
 			<Add option="-DASIO_HAS_STD_TYPE_TRAITS" />
 			<Add directory="$(#asio.INCLUDE)" />
+			<Add directory="./include" />
 		</Compiler>
-		<Unit filename="src/handler.cpp" />
 		<Unit filename="include/handler.h" />
-		<Unit filename="src/main.cpp">
-			<Option target="Windows Debug" />
-			<Option target="Windows Release" />
-		</Unit>
 		<Unit filename="include/namedtype.h" />
-		<Unit filename="src/parser.cpp" />
 		<Unit filename="include/parser.h" />
 		<Unit filename="include/receiver.h" />
 		<Unit filename="include/sap.h" />
 		<Unit filename="include/sapdlldefine.h" />
-		<Unit filename="src/sapserver.cpp" />
 		<Unit filename="include/sapserver.h" />
-		<Unit filename="src/sapserverimpl.cpp" />
 		<Unit filename="include/sapserverimpl.h" />
-		<Unit filename="src/sender.cpp" />
 		<Unit filename="include/sender.h" />
+		<Unit filename="src/handler.cpp" />
+		<Unit filename="src/main.cpp">
+			<Option target="Windows Debug" />
+			<Option target="Windows Release" />
+		</Unit>
+		<Unit filename="src/parser.cpp" />
+		<Unit filename="src/sapserver.cpp" />
+		<Unit filename="src/sapserverimpl.cpp" />
+		<Unit filename="src/sender.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
