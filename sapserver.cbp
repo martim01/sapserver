@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="sapserver" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Windows Debug">
+				<Option output="bin/Debug/sapserver" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="ws2_32" />
+				</Linker>
+			</Target>
+			<Target title="Windows Release">
+				<Option output="bin/Release/sapserver" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="ws2_32" />
+				</Linker>
+			</Target>
+			<Target title="Shared Library Windows Release">
+				<Option platforms="Windows;" />
+				<Option output="lib/sapserver" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/SharedLibrary/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DSAP_DLL" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="ws2_32" />
+				</Linker>
+			</Target>
+			<Target title="Shared Library Windows Debug">
+				<Option platforms="Windows;" />
+				<Option output="lib/sapserverd" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/SharedLibraryDebug/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DSAP_DLL" />
+				</Compiler>
+				<Linker>
+					<Add library="ws2_32" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++14" />
+			<Add option="-fexceptions" />
+			<Add option="-DASIO_STANDALONE" />
+			<Add option="-DASIO_HAS_STD_TYPE_TRAITS" />
+			<Add directory="$(#asio.INCLUDE)" />
+		</Compiler>
+		<Unit filename="src/handler.cpp" />
+		<Unit filename="include/handler.h" />
+		<Unit filename="src/main.cpp">
+			<Option target="Windows Debug" />
+			<Option target="Windows Release" />
+		</Unit>
+		<Unit filename="include/namedtype.h" />
+		<Unit filename="src/parser.cpp" />
+		<Unit filename="include/parser.h" />
+		<Unit filename="include/receiver.h" />
+		<Unit filename="include/sap.h" />
+		<Unit filename="include/sapdlldefine.h" />
+		<Unit filename="src/sapserver.cpp" />
+		<Unit filename="include/sapserver.h" />
+		<Unit filename="src/sapserverimpl.cpp" />
+		<Unit filename="include/sapserverimpl.h" />
+		<Unit filename="src/sender.cpp" />
+		<Unit filename="include/sender.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
