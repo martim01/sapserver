@@ -8,6 +8,7 @@ namespace sapserver
     class SAP_EXPORT Handler
     {
         public:
+
             virtual void SapMessage(const sap& aMessage)=0;
     };
 

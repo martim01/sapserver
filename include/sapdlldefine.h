@@ -7,6 +7,6 @@
         #define SAP_EXPORT __declspec(dllimport)
     #endif // DNSSD_EXPORT
 #else
-#define DNSSD_EXPORT
+#define SAP_EXPORT
 #endif
 

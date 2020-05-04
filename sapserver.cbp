@@ -6,7 +6,7 @@
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
-			<Target title="Shared Library Windows Release">
+			<Target title="Windows Release">
 				<Option platforms="Windows;" />
 				<Option output="lib/sapserver" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/SharedLibrary/" />
@@ -21,7 +21,7 @@
 					<Add library="ws2_32" />
 				</Linker>
 			</Target>
-			<Target title="Shared Library Windows Debug">
+			<Target title="Windows Debug">
 				<Option platforms="Windows;" />
 				<Option output="lib/sapserverd" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/SharedLibraryDebug/" />
@@ -35,6 +35,31 @@
 					<Add library="ws2_32" />
 				</Linker>
 			</Target>
+			<Target title="Linux Release">
+				<Option platforms="Unix;" />
+				<Option output="lib/libsapserver.so" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="0" extension_auto="0" />
+				<Option object_output="obj/SharedLibrary/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DSAP_DLL" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Linux Debug">
+				<Option platforms="Unix;" />
+				<Option output="lib/libsapserverd.so" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="0" extension_auto="0" />
+				<Option object_output="obj/Debug/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DSAP_DLL" />
+				</Compiler>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -45,20 +70,20 @@
 			<Add directory="$(#asio.INCLUDE)" />
 			<Add directory="./include" />
 		</Compiler>
-		<Unit filename="include/handler.h" />
 		<Unit filename="include/namedtype.h" />
 		<Unit filename="include/parser.h" />
 		<Unit filename="include/receiver.h" />
 		<Unit filename="include/sap.h" />
 		<Unit filename="include/sapdlldefine.h" />
+		<Unit filename="include/saphandler.h" />
 		<Unit filename="include/sapserver.h" />
 		<Unit filename="include/sapserverimpl.h" />
 		<Unit filename="include/sender.h" />
-		<Unit filename="src/handler.cpp" />
 		<Unit filename="src/main.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="src/parser.cpp" />
+		<Unit filename="src/saphandler.cpp" />
 		<Unit filename="src/sapserver.cpp" />
 		<Unit filename="src/sapserverimpl.cpp" />
 		<Unit filename="src/sender.cpp" />
