@@ -2,7 +2,7 @@
 #include "parser.h"
 #include <iostream>
 
-using namespace sapserver;
+using namespace pml;
 
 void StdHandler::SapMessage(const sap& aMessage)
 {

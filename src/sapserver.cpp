@@ -1,7 +1,8 @@
 #include "sapserver.h"
 #include "sapserverimpl.h"
 
-using namespace sapserver;
+
+using namespace pml;
 
 SapServer::SapServer(std::shared_ptr<Handler> pHandler) :
     m_pImpl(std::unique_ptr<SapServerImpl>(new SapServerImpl(pHandler)))

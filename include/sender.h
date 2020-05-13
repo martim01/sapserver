@@ -7,7 +7,7 @@
 #include "namedtype.h"
 #include <mutex>
 
-namespace sapserver
+namespace pml
 {
 
     class Sender

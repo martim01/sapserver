@@ -4,7 +4,7 @@
 #include <list>
 #include "sap.h"
 
-namespace sapserver
+namespace pml
 {
     class Handler;
 

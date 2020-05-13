@@ -1,14 +1,15 @@
 #include "parser.h"
 #include <algorithm>
 #include "saphandler.h"
-
-using namespace sapserver;
+#include "log.h"
+using namespace pml;
 
 
 void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned char> vMessage)
 {
     if(vMessage.size() < 8)
     {
+        Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Parser SAP message to short" << std::endl;
         return;
     }
 
@@ -41,5 +42,9 @@ void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned cha
     if(aMessage.sMimeType.empty() == false)
     {
         m_pHandler->SapMessage(aMessage);
+    }
+    else
+    {
+        Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Parser SAP message no mime type" << std::endl;
     }
 }

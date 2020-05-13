@@ -2,7 +2,7 @@
 #include <string>
 #include "sapdlldefine.h"
 
-namespace sapserver
+namespace pml
 {
     struct SAP_EXPORT sap
     {

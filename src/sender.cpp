@@ -4,8 +4,9 @@
 #ifdef __GNU__
 #include <linux/socket.h>
 #endif // __GNU__
+#include "log.h"
 
-using namespace sapserver;
+using namespace pml;
 
 const std::string Sender::STR_MIME = "application/sdp";
 
@@ -33,6 +34,7 @@ void Sender::Run()
     }
     else
     {
+        Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Sender Run option failed: " << ec << std::endl;
         std::cout << ec << std::endl;
     }
 }
@@ -48,7 +50,7 @@ void Sender::do_send()
         }
         else
         {
-            std::cout << ec << std::endl;
+            Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Sender Send failed: " << ec << std::endl;
         }
     });
 }
@@ -110,6 +112,10 @@ void Sender::do_timeout()
         if (!ec)
         {
             do_send();
+        }
+        else
+        {
+            Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Sender Timeout failed: " << ec << std::endl;
         }
     });
 }

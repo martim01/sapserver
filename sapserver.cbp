@@ -47,6 +47,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="pml_log" />
 				</Linker>
 			</Target>
 			<Target title="Linux Debug">
@@ -59,6 +60,9 @@
 					<Add option="-g" />
 					<Add option="-DSAP_DLL" />
 				</Compiler>
+				<Linker>
+					<Add library="pml_logd" />
+				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
@@ -69,7 +73,11 @@
 			<Add option="-DASIO_HAS_STD_TYPE_TRAITS" />
 			<Add directory="$(#asio.INCLUDE)" />
 			<Add directory="./include" />
+			<Add directory="../log/include" />
 		</Compiler>
+		<Linker>
+			<Add directory="../log/lib" />
+		</Linker>
 		<Unit filename="include/namedtype.h" />
 		<Unit filename="include/parser.h" />
 		<Unit filename="include/receiver.h" />
@@ -83,6 +91,7 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="src/parser.cpp" />
+		<Unit filename="src/receiver.cpp" />
 		<Unit filename="src/saphandler.cpp" />
 		<Unit filename="src/sapserver.cpp" />
 		<Unit filename="src/sapserverimpl.cpp" />

@@ -5,7 +5,7 @@
 #include <list>
 
 
-namespace sapserver
+namespace pml
 {
     class Sender;
     class Receiver;

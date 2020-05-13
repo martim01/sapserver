@@ -1,7 +1,7 @@
 #pragma once
 #include "sapdlldefine.h"
 
-namespace sapserver
+namespace pml
 {
     struct sap;
 

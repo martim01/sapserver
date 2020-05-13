@@ -3,8 +3,9 @@
 #include "parser.h"
 #include "saphandler.h"
 #include "receiver.h"
+#include "log.h"
 
-using namespace sapserver;
+using namespace pml;
 
 SapServerImpl::SapServerImpl(std::shared_ptr<Handler> pHandler) : m_pHandler(pHandler)
 {
@@ -18,6 +19,8 @@ SapServerImpl::~SapServerImpl()
 
 void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::milliseconds delay, const std::string& sSDP)
 {
+    Log::Get(Log::LOG_DEBUG) << "SapServer\t" << "AddSender: " << localAddress.Get() << std::endl;
+
     auto pairSender = m_mSenders.insert(std::make_pair(localAddress.Get(), std::unique_ptr<Sender>(new Sender( m_context, localAddress, asio::ip::make_address("239.255.255.255"), SAP_PORT))));
 
     pairSender.first->second->SetDelay(delay);
@@ -36,34 +39,55 @@ void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::millis
 
 void SapServerImpl::SetSenderDelay(const IpAddress& localAddress, std::chrono::milliseconds delay)
 {
+    Log::Get(Log::LOG_DEBUG) << "SapServer\t" << "SetSenderDelay: " << localAddress.Get();
     auto itSender = m_mSenders.find(localAddress.Get());
     if(itSender != m_mSenders.end())
     {
         itSender->second->SetDelay(delay);
+        Log::Get(Log::LOG_DEBUG) << delay.count() << "ms" << std::endl;
     }
+    else
+    {
+        Log::Get(Log::LOG_WARN) << "Sender not found" << std::endl;
+    }
+
 }
 
 void SapServerImpl::SetSenderSDP(const IpAddress& localAddress, const std::string& sSDP)
 {
+    Log::Get(Log::LOG_DEBUG) << "SapServer\t" << "SetSenderDelay: " << localAddress.Get();
+
     auto itSender = m_mSenders.find(localAddress.Get());
     if(itSender != m_mSenders.end())
     {
         itSender->second->SetSDP(sSDP);
+        Log::Get(Log::LOG_DEBUG) << sSDP << std::endl;
+    }
+    else
+    {
+        Log::Get(Log::LOG_WARN) << "Sender not found" << std::endl;
     }
 }
 
 void SapServerImpl::RemoveSender(const IpAddress& localAddress)
 {
+    Log::Get(Log::LOG_DEBUG) << "SapServer\t" << "RemoveSender: " << localAddress.Get();
     auto itSender = m_mSenders.find(localAddress.Get());
     if(itSender != m_mSenders.end())
     {
         itSender->second->Remove();
         m_mSenders.erase(localAddress.Get());
+        Log::Get(Log::LOG_DEBUG) << std::endl;
+    }
+    else
+    {
+        Log::Get(Log::LOG_WARN) << "Sender not found" << std::endl;
     }
 }
 
 void SapServerImpl::RemoveAllSenders()
 {
+    Log::Get(Log::LOG_DEBUG) << "SapServer\t" << "RemoveAllSenders" << std::endl;
     for(auto itSender = m_mSenders.begin(); itSender != m_mSenders.end(); ++itSender)
     {
         itSender->second->Remove();
@@ -77,6 +101,7 @@ void SapServerImpl::Run()
 {
     if(m_context.stopped())
     {
+        Log::Get(Log::LOG_INFO) << "SapServer\t" << "Restart context" << std::endl;
         m_context.restart();
     }
 
@@ -84,11 +109,12 @@ void SapServerImpl::Run()
     {
         try
         {
+            Log::Get(Log::LOG_INFO) << "SapServer\t" << "Run context" << std::endl;
             m_context.run();
         }
         catch (const std::exception& e)
         {
-            std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Exception: " << e.what() << "\n";
+            Log::Get(Log::LOG_ERROR) << "SapServer\t Faled to run context: " << e.what() << std::endl;
         }
     });
 
@@ -98,6 +124,7 @@ void SapServerImpl::Run()
 
 void SapServerImpl::Stop()
 {
+    Log::Get(Log::LOG_INFO) << "SapServer\t" << "Stop context" << std::endl;
     m_context.stop();
 }
 
@@ -109,8 +136,9 @@ bool SapServerImpl::IsStopped()
 
 void SapServerImpl::AddReceiver(const IpAddress& multicastAddress)
 {
-    auto pairReceiver = m_mReceivers.insert(std::make_pair(multicastAddress.Get(),
-                                            std::unique_ptr<Receiver>( new Receiver(m_context, std::make_shared<Parser>(m_pHandler)))));
+    Log::Get(Log::LOG_DEBUG) << "SapServer\t" << "AddReceiver: " << multicastAddress.Get() << std::endl;
+
+    auto pairReceiver = m_mReceivers.insert(std::make_pair(multicastAddress.Get(), std::unique_ptr<Receiver>( new Receiver(m_context, std::make_shared<Parser>(m_pHandler)))));
 
     if(pairReceiver.second)
     {
@@ -125,5 +153,6 @@ void SapServerImpl::AddReceiver(const IpAddress& multicastAddress)
 
 void SapServerImpl::RemoveReceiver(const IpAddress& multicastAddress)
 {
+    Log::Get(Log::LOG_DEBUG) << "SapServer\t" << "RemoveReceiver: " << multicastAddress.Get() << std::endl;
     m_mReceivers.erase(multicastAddress.Get());
 }
