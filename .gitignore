@@ -33,3 +33,4 @@
 /bin/Debug
 /*.depend
 /*.layout
+build/
