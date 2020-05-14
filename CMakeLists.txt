@@ -40,7 +40,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 	target_compile_definitions(sapserver PRIVATE __GNU__)
 endif()
 
-set_target_properties(sapserver PROPERTIES LIBRARY_OUTPUT_DIRECTORY "../lib/")
+set_target_properties(sapserver PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib/)
 target_link_libraries(sapserver pml_log)
 
 #linux specific
