@@ -14,11 +14,11 @@ if((NOT ASIO_INCLUDE_DIR) OR (NOT EXISTS ${ASIO_INCLUDE_DIR}))
     # we couldn't find the header files for FOO or they don't exist
     message("Unable to find Asio")
     
-
     # we have a submodule setup for asio, assume it is under external/asio
     # now we need to clone this submodule
     execute_process(COMMAND git submodule update --init -- external/asio
                     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+   find_path(ASIO_INCLUDE_DIR NAMES "asio.hpp" PATHS ${CMAKE_CURRENT_SOURCE_DIR}/external/asio/asio/include)
 else()
 	message("Found Asio")
 endif()
