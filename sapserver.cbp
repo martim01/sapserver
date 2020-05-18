@@ -44,6 +44,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-DSAP_DLL" />
+					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -71,7 +72,7 @@
 			<Add option="-fexceptions" />
 			<Add option="-DASIO_STANDALONE" />
 			<Add option="-DASIO_HAS_STD_TYPE_TRAITS" />
-			<Add directory="$(#asio.INCLUDE)" />
+			<Add directory="external/asio/asio/include" />
 			<Add directory="./include" />
 			<Add directory="../log/include" />
 		</Compiler>
