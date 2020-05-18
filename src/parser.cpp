@@ -23,7 +23,7 @@ void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned cha
     aMessage.bCompressed = (vMessage[0] & 0x1);
 
     aMessage.nAuthenticationLength = vMessage[1];
-    aMessage.nVersion = (static_cast<uint16_t>(vMessage[3]) << 8) + vMessage[2];
+    aMessage.nMessageId = (static_cast<uint16_t>(vMessage[3]) << 8) + vMessage[2];
 
     aMessage.nOriginatingSource =  (static_cast<uint32_t>(vMessage[7]) << 24) +
                                    (static_cast<uint32_t>(vMessage[6]) << 16) +
