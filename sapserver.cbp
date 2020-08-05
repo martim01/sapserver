@@ -15,6 +15,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-DSAP_DLL" />
+					<Add option="-D__WIN32__" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -31,6 +32,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DSAP_DLL" />
+					<Add option="-D__WIN32__" />
 				</Compiler>
 				<Linker>
 					<Add library="ws2_32" />
