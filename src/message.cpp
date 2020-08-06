@@ -1,9 +1,8 @@
 #include "message.h"
 
+using namespace sapserver;
 
-
-
-Message::Message(uint16_t nVersion, const std::string& sIp) :
+Message::Message(unsigned short nVersion, const std::string& sIp, const std::string& sSDP) :
     m_nVersion(nVersion)
 {
 

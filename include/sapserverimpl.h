@@ -1,6 +1,6 @@
 #pragma once
 #include "asio.hpp"
-#include "namedtype.h"
+#include "sapnamedtype.h"
 #include <map>
 #include <list>
 

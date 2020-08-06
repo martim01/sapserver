@@ -1,6 +1,6 @@
 #pragma once
 #include "sapdlldefine.h"
-#include "namedtype.h"
+#include "sapnamedtype.h"
 #include <memory>
 #include <chrono>
 

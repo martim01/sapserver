@@ -82,15 +82,15 @@
 		<Linker>
 			<Add directory="../log/lib" />
 		</Linker>
-		<Unit filename="include/namedtype.h" />
-		<Unit filename="include/parser.h" />
-		<Unit filename="include/receiver.h" />
 		<Unit filename="include/sap.h" />
 		<Unit filename="include/sapdlldefine.h" />
 		<Unit filename="include/saphandler.h" />
+		<Unit filename="include/sapnamedtype.h" />
+		<Unit filename="include/sapparser.h" />
+		<Unit filename="include/sapreceiver.h" />
+		<Unit filename="include/sapsender.h" />
 		<Unit filename="include/sapserver.h" />
 		<Unit filename="include/sapserverimpl.h" />
-		<Unit filename="include/sender.h" />
 		<Unit filename="src/main.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

@@ -1,8 +1,8 @@
 #include "sapserverimpl.h"
-#include "sender.h"
-#include "parser.h"
+#include "sapsender.h"
+#include "sapparser.h"
 #include "saphandler.h"
-#include "receiver.h"
+#include "sapreceiver.h"
 #include "log.h"
 
 using namespace pml;
