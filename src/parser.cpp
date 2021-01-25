@@ -25,14 +25,30 @@ void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned cha
     aMessage.nAuthenticationLength = vMessage[1];
     aMessage.nMessageId = (static_cast<uint16_t>(vMessage[3]) << 8) + vMessage[2];
 
-    aMessage.nOriginatingSource =  (static_cast<uint32_t>(vMessage[7]) << 24) +
-                                   (static_cast<uint32_t>(vMessage[6]) << 16) +
-                                   (static_cast<uint32_t>(vMessage[5]) << 8) +
-                                   (static_cast<uint32_t>(vMessage[4]));
+    size_t nEndOfSource(8);
+    if(aMessage.bIpv6 == false)
+    {
+        aMessage.nOriginatingSource[0] =  (static_cast<uint32_t>(vMessage[7]) << 24) +
+                                        (static_cast<uint32_t>(vMessage[6]) << 16) +
+                                        (static_cast<uint32_t>(vMessage[5]) << 8) +
+                                        (static_cast<uint32_t>(vMessage[4]));
 
+    }
+    else
+    {
+        nEndOfSource = 20;
+        for(size_t i = 0; i < 4; i++)
+        {
+            int nByte = 4+(4*i);
+            aMessage.nOriginatingSource[i] =  (static_cast<uint32_t>(vMessage[nByte+3]) << 24) +
+                                    (static_cast<uint32_t>(vMessage[nByte+2]) << 16) +
+                                   (static_cast<uint32_t>(vMessage[nByte+1]) << 8) +
+                                   (static_cast<uint32_t>(vMessage[nByte]));
+        }
+    }
 
     //extract the mime type -all chars up to \0
-    auto itNull = std::find(vMessage.begin()+8, vMessage.end(), 0x00);
+    auto itNull = std::find(vMessage.begin()+nEndOfSource, vMessage.end(), 0x00);
     aMessage.sMimeType = std::string(vMessage.begin()+8, itNull);
     if(itNull != vMessage.end())
     {
