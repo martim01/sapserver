@@ -13,8 +13,7 @@ namespace pml
         bEncrypted(false),
         bCompressed(false),
         nAuthenticationLength(0),
-        nMessageId(0),
-        nOriginatingSource{0,0,0,0}{}
+        nMessageId(0){}
 
         uint8_t nVersion;
         bool bIpv6;
@@ -23,7 +22,7 @@ namespace pml
         bool bCompressed;
         uint8_t nAuthenticationLength;
         uint16_t nMessageId;
-        uint32_t nOriginatingSource[4];
+        std::string sOriginatingSource;
 
         std::string sSenderIp;
         std::string sMimeType;

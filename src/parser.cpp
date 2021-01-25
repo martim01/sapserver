@@ -2,6 +2,9 @@
 #include <algorithm>
 #include "saphandler.h"
 #include "log.h"
+#include "asio.hpp"
+
+
 using namespace pml;
 
 
@@ -28,23 +31,29 @@ void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned cha
     size_t nEndOfSource(8);
     if(aMessage.bIpv6 == false)
     {
-        aMessage.nOriginatingSource[0] =  (static_cast<uint32_t>(vMessage[7]) << 24) +
-                                        (static_cast<uint32_t>(vMessage[6]) << 16) +
-                                        (static_cast<uint32_t>(vMessage[5]) << 8) +
-                                        (static_cast<uint32_t>(vMessage[4]));
+        asio::ip::address_v4::bytes_type bytes;
+        std::copy_n(vMessage.begin()+4, 4, bytes.begin());
+        asio::ip::address_v4 addr(asio::ip::make_address_v4(bytes));
 
+        aMessage.sOriginatingSource = addr.to_string();
+
+        pml::Log::Get(pml::Log::LOG_TRACE) << "SAP: Sender=" << sSenderIp << " Source=" << aMessage.sOriginatingSource << std::endl;
+        //aMessage.nOriginatingSource[0] =  (static_cast<uint32_t>(vMessage[7]) << 24) +
+        //                                (static_cast<uint32_t>(vMessage[6]) << 16) +
+         //                               (static_cast<uint32_t>(vMessage[5]) << 8) +
+          //                              (static_cast<uint32_t>(vMessage[4]));
+//
     }
     else
     {
         nEndOfSource = 20;
-        for(size_t i = 0; i < 4; i++)
-        {
-            int nByte = 4+(4*i);
-            aMessage.nOriginatingSource[i] =  (static_cast<uint32_t>(vMessage[nByte+3]) << 24) +
-                                    (static_cast<uint32_t>(vMessage[nByte+2]) << 16) +
-                                   (static_cast<uint32_t>(vMessage[nByte+1]) << 8) +
-                                   (static_cast<uint32_t>(vMessage[nByte]));
-        }
+
+        asio::ip::address_v6::bytes_type bytes;
+        std::copy_n(vMessage.begin()+4, 16, bytes.begin());
+        asio::ip::address_v6 addr(asio::ip::make_address_v6(bytes));
+
+        aMessage.sOriginatingSource = addr.to_string();
+
     }
 
     //extract the mime type -all chars up to \0
