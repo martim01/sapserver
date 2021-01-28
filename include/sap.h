@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "sapdlldefine.h"
 
 namespace pml
@@ -20,12 +21,12 @@ namespace pml
         bool bDeletionMessage;
         bool bEncrypted;
         bool bCompressed;
-        uint8_t nAuthenticationLength;
+        uint32_t nAuthenticationLength;
         uint16_t nMessageId;
         std::string sOriginatingSource;
-
         std::string sSenderIp;
         std::string sMimeType;
         std::string sData;
+        std::vector<uint8_t> vAuthentication;
     };
 }

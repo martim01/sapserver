@@ -26,39 +26,37 @@ void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned cha
     aMessage.bCompressed = (vMessage[0] & 0x1);
 
     aMessage.nAuthenticationLength = vMessage[1];
+    aMessage.nAuthenticationLength*=4;  //convert from number of 32 bit words to number of bytes
     aMessage.nMessageId = (static_cast<uint16_t>(vMessage[3]) << 8) + vMessage[2];
 
-    size_t nEndOfSource(8);
+    size_t nStartOfPayload(8);
     if(aMessage.bIpv6 == false)
     {
         asio::ip::address_v4::bytes_type bytes;
         std::copy_n(vMessage.begin()+4, 4, bytes.begin());
         asio::ip::address_v4 addr(asio::ip::make_address_v4(bytes));
-
         aMessage.sOriginatingSource = addr.to_string();
-
-        pml::Log::Get(pml::Log::LOG_TRACE) << "SAP: Sender=" << sSenderIp << " Source=" << aMessage.sOriginatingSource << std::endl;
-        //aMessage.nOriginatingSource[0] =  (static_cast<uint32_t>(vMessage[7]) << 24) +
-        //                                (static_cast<uint32_t>(vMessage[6]) << 16) +
-         //                               (static_cast<uint32_t>(vMessage[5]) << 8) +
-          //                              (static_cast<uint32_t>(vMessage[4]));
-//
     }
     else
     {
-        nEndOfSource = 20;
+        nStartOfPayload = 20;
 
         asio::ip::address_v6::bytes_type bytes;
         std::copy_n(vMessage.begin()+4, 16, bytes.begin());
         asio::ip::address_v6 addr(asio::ip::make_address_v6(bytes));
-
         aMessage.sOriginatingSource = addr.to_string();
+    }
 
+    //next is authentication data if any
+    if(aMessage.nAuthenticationLength != 0)
+    {
+        std::copy(vMessage.begin()+nStartOfPayload, vMessage.begin()+nStartOfPayload+aMessage.nAuthenticationLength, std::back_inserter(aMessage.vAuthentication));
+        nStartOfPayload += aMessage.nAuthenticationLength;
     }
 
     //extract the mime type -all chars up to \0
-    auto itNull = std::find(vMessage.begin()+nEndOfSource, vMessage.end(), 0x00);
-    aMessage.sMimeType = std::string(vMessage.begin()+8, itNull);
+    auto itNull = std::find(vMessage.begin()+nStartOfPayload, vMessage.end(), 0x00);
+    aMessage.sMimeType = std::string(vMessage.begin()+nStartOfPayload, itNull);
     if(itNull != vMessage.end())
     {
         ++itNull;
