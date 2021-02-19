@@ -12,7 +12,7 @@ void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned cha
 {
     if(vMessage.size() < 8)
     {
-        Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Parser SAP message to short" << std::endl;
+        Log(LOG_ERROR) << "SapServer\t" << "Parser SAP message to short";
         return;
     }
 
@@ -68,6 +68,6 @@ void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned cha
     }
     else
     {
-        Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Parser SAP message no mime type" << std::endl;
+        Log(LOG_ERROR) << "SapServer\t" << "Parser SAP message no mime type";
     }
 }

@@ -9,13 +9,13 @@ void StdHandler::SapMessage(const sap& aMessage)
 {
     if(aMessage.bDeletionMessage == false)
     {
-        std::cout << "------ ADD SAP --------" << std::endl;
+        std::cout << "------ ADD SAP --------";
     }
     else
     {
-        std::cout << "------ REM SAP --------" << std::endl;
+        std::cout << "------ REM SAP --------";
     }
-    std::cout << aMessage.sMimeType << std::endl;
-    std::cout << aMessage.sData << std::endl;
-    std::cout << "-----------------------" << std::endl;
+    std::cout << aMessage.sMimeType;
+    std::cout << aMessage.sData;
+    std::cout << "-----------------------";
 }

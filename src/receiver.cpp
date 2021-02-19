@@ -28,7 +28,7 @@ void Receiver::Run(const asio::ip::address& listen_address, const asio::ip::addr
     }
     else
     {
-        Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Receiver Run failed to open socket" << ec << std::endl;
+        Log(LOG_ERROR) << "SapServer\t" << "Receiver Run failed to open socket" << ec;
     }
 }
 
@@ -45,7 +45,7 @@ void Receiver::do_receive()
         }
         else
         {
-            Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Receiver receive failed :" << ec << std::endl;
+            Log(LOG_ERROR) << "SapServer\t" << "Receiver receive failed :" << ec;
         }
     });
 }

@@ -34,8 +34,8 @@ void Sender::Run()
     }
     else
     {
-        Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Sender Run option failed: " << ec << std::endl;
-        std::cout << ec << std::endl;
+        Log(LOG_ERROR) << "SapServer\t" << "Sender Run option failed: " << ec;
+        std::cout << ec;
     }
 }
 
@@ -50,7 +50,7 @@ void Sender::do_send()
         }
         else
         {
-            Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Sender Send failed: " << ec << std::endl;
+            Log(LOG_ERROR) << "SapServer\t" << "Sender Send failed: " << ec;
         }
     });
 }
@@ -115,7 +115,7 @@ void Sender::do_timeout()
         }
         else
         {
-            Log::Get(Log::LOG_ERROR) << "SapServer\t" << "Sender Timeout failed: " << ec << std::endl;
+            Log(LOG_ERROR) << "SapServer\t" << "Sender Timeout failed: " << ec;
         }
     });
 }
