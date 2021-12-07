@@ -13,18 +13,18 @@ target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 
 #Get log
-find_path(TEMP_DIR7 NAMES "CMakeLists.txt" PATHS ${DIR_LOG})
-if((NOT TEMP_DIR7) OR (NOT EXISTS ${TEMP_DIR7}))
+find_path(SP_TEMP_DIR7 NAMES "CMakeLists.txt" PATHS ${DIR_LOG})
+if((NOT SP_TEMP_DIR7) OR (NOT EXISTS ${SP_TEMP_DIR7}))
 	message(STATUS "log not found - clone from GitHub")
 	execute_process(COMMAND git clone https://github.com/martim01/log/ ${DIR_LOG})
 endif()
-unset(TEMP_DIR7)
+unset(SP_TEMP_DIR7)
 
-find_path(TEMP_DIR8 NAMES "CMakeLists.txt" PATHS ${DIR_LOG})
-if((NOT TEMP_DIR8) OR (NOT EXISTS ${TEMP_DIR8}))
+find_path(SP_TEMP_DIR8 NAMES "CMakeLists.txt" PATHS ${DIR_LOG})
+if((NOT SP_TEMP_DIR8) OR (NOT EXISTS ${SP_TEMP_DIR8}))
 	message(FATAL_ERROR "Failed to clone pml::Log")
 endif()
-unset(TEMP_DIR8)
+unset(SP_TEMP_DIR8)
 
 if(${BUILD_LOG})
 	add_subdirectory(${DIR_LOG} ${DIR_LOG}/build)
@@ -34,17 +34,20 @@ endif()
 
 
 # ASIO
-find_path(TEMP_DIR NAMES "asio.hpp" PATHS ${DIR_ASIO}/asio/include)
-if((NOT TEMP_DIR) OR (NOT EXISTS ${TEMP_DIR}))
-	message("asio not found - clone from GitHub")
+message(STATUS "Look for asio in ${DIR_ASIO}")
+find_path(SP_TEMP_DIR NAMES "asio.hpp" PATHS ${DIR_ASIO}/asio/include)
+if((NOT SP_TEMP_DIR) OR (NOT EXISTS ${SP_TEMP_DIR}))
+	message(STATUS "asio not found - clone from GitHub")
 	execute_process(COMMAND git clone https://github.com/chriskohlhoff/asio ${DIR_ASIO})
 endif()
 
-find_path(TEMP_DIR2 NAMES "asio.hpp" PATHS ${TEMP_DIR})
-if((NOT TEMP_DIR2) OR (NOT EXISTS ${TEMP_DIR2}))
+find_path(SP_TEMP_DIR2 NAMES "asio.hpp" PATHS ${DIR_ASIO}/asio/include)
+if((NOT SP_TEMP_DIR2) OR (NOT EXISTS ${SP_TEMP_DIR2}))
 	message(FATAL_ERROR "Failed to clone asio")
+else()
+	message(STATUS "asio found")
 endif()
-unset(TEMP_DIR2)
+unset(SP_TEMP_DIR2)
 
 target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
 include_directories(${DIR_LOG}/include)
