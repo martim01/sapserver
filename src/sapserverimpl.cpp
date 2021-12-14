@@ -38,7 +38,7 @@ void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::millis
             Run();
         }
     }
-    catch(std::system_error e)
+    catch(const std::system_error& e)
     {
         pmlLog(LOG_ERROR) << "SapServer: Cannot add sender " << e.what();
     }
