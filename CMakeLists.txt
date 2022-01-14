@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
-project(sapserver LANGUAGES CXX)
+project(sapserver LANGUAGES CXX VERSION 1.1.0)
+
+execute_process(COMMAND ${CMAKE_COMMAND} -DNAMESPACE=sapserver -DMAJOR=${PROJECT_VERSION_MAJOR} -DMINOR=${PROJECT_VERSION_MINOR} -DPATCH=${PROJECT_VERSION_PATCH} -P ${CMAKE_CURRENT_SOURCE_DIR}/version.cmake)
 
 SET(DIR_BASE $ENV{HOME} CACHE STRING "base location for libraries")
 SET(DIR_LOG ${DIR_BASE}/log CACHE STRING "location of pml log")
@@ -9,10 +11,10 @@ if(NOT DEFINED BUILD_LOG)
         SET(BUILD_LOG ON)
 endif()
 
-add_library(sapserver SHARED "src/parser.cpp" "src/receiver.cpp" "src/saphandler.cpp" "src/sapserver.cpp" "src/sapserverimpl.cpp" "src/sender.cpp")
+add_library(sapserver SHARED "src/parser.cpp" "src/receiver.cpp" "src/saphandler.cpp" "src/sapserver.cpp" "src/sapserverimpl.cpp" "src/sender.cpp" ${CMAKE_BINARY_DIR}/src/sapserver_version.cpp)
 
 target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
-
+target_include_directories(sapserver PUBLIC ${CMAKE_BINARY_DIR}/include)
 
 #Get log
 find_path(SP_TEMP_DIR7 NAMES "CMakeLists.txt" PATHS ${DIR_LOG} NO_CACHE)
