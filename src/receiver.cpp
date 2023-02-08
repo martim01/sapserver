@@ -35,11 +35,14 @@ void Receiver::Run(const asio::ip::address& listen_address, const asio::ip::addr
 
 void Receiver::do_receive()
 {
+    pmlLog(LOG_TRACE) << "SapServer\t" << "Receiver do_receive";
+
     m_socket.async_receive_from(asio::buffer(m_data), m_sender_endpoint,
         [this](std::error_code ec, std::size_t length)
     {
         if (!ec)
         {
+            pmlLog(LOG_TRACE) << "SapServer\t" << "Receiver do_receive: received";
             m_pParser->ParseMessage(m_sender_endpoint.address().to_string(), std::vector<unsigned char>(m_data.begin(), m_data.begin()+length));
             do_receive();
         }

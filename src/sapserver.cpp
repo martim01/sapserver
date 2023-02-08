@@ -56,9 +56,9 @@ bool SapServer::IsStopped()
 }
 
 
-void SapServer::AddReceiver(const IpAddress& multicastAddress)
+void SapServer::AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress)
 {
-    m_pImpl->AddReceiver(multicastAddress);
+    m_pImpl->AddReceiver(multicastAddress, listenAddress);
 }
 
 void SapServer::RemoveReceiver(const IpAddress& multicastAddress)

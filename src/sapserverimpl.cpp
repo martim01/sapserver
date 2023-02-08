@@ -15,6 +15,7 @@ SapServerImpl::SapServerImpl(std::shared_ptr<Handler> pHandler) : m_pHandler(pHa
 SapServerImpl::~SapServerImpl()
 {
     RemoveAllSenders();
+    Stop();
 }
 
 void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::milliseconds delay, const std::string& sSDP)
@@ -106,26 +107,30 @@ void SapServerImpl::RemoveAllSenders()
 
 void SapServerImpl::Run()
 {
-    if(m_context.stopped())
+    if(m_pThread == nullptr)
     {
-        pmlLog(LOG_INFO) << "SapServer\t" << "Restart context";
-        m_context.restart();
+        if(m_context.stopped())
+        {
+            pmlLog(LOG_INFO) << "SapServer\t" << "Restart context";
+            m_context.restart();
+        }
+
+        m_pThread = std::make_unique<std::thread>([this]()
+        {
+            try
+            {
+                auto work = asio::require(m_context.get_executor(), asio::execution::outstanding_work.tracked);
+                pmlLog(LOG_INFO) << "SapServer\t" << "Run context";
+                m_context.run();
+            }
+            catch (const std::exception& e)
+            {
+                pmlLog(LOG_ERROR) << "SapServer\t Failed to run context: " << e.what();
+            }
+
+            pmlLog(pml::LOG_DEBUG) << "SapServer\tThread finished";
+        });
     }
-
-    std::thread t([this]()
-    {
-        try
-        {
-            pmlLog(LOG_INFO) << "SapServer\t" << "Run context";
-            m_context.run();
-        }
-        catch (const std::exception& e)
-        {
-            pmlLog(LOG_ERROR) << "SapServer\t Faled to run context: " << e.what();
-        }
-    });
-
-    t.detach();
 }
 
 
@@ -133,6 +138,7 @@ void SapServerImpl::Stop()
 {
     pmlLog(LOG_INFO) << "SapServer\t" << "Stop context";
     m_context.stop();
+    m_pThread->join();
 }
 
 bool SapServerImpl::IsStopped()
@@ -141,7 +147,7 @@ bool SapServerImpl::IsStopped()
 }
 
 
-void SapServerImpl::AddReceiver(const IpAddress& multicastAddress)
+void SapServerImpl::AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress)
 {
     pmlLog(LOG_DEBUG) << "SapServer\t" << "AddReceiver: " << multicastAddress.Get();
 
@@ -149,7 +155,7 @@ void SapServerImpl::AddReceiver(const IpAddress& multicastAddress)
 
     if(pairReceiver.second)
     {
-        pairReceiver.first->second->Run(asio::ip::make_address("0.0.0.0"), asio::ip::make_address(multicastAddress.Get()), SAP_PORT);
+        pairReceiver.first->second->Run(asio::ip::make_address(listenAddress.Get()), asio::ip::make_address(multicastAddress.Get()), SAP_PORT);
     }
 
     if(IsStopped())

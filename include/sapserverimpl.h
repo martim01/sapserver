@@ -25,7 +25,7 @@ namespace pml
             void RemoveSender(const IpAddress& localAddress);
             void RemoveAllSenders();
 
-            void AddReceiver(const IpAddress& multicastAddress);
+            void AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress);
             void RemoveReceiver(const IpAddress& multicastAddress);
 
 
@@ -43,6 +43,7 @@ namespace pml
             std::shared_ptr<Handler> m_pHandler;
             static const uint16_t SAP_PORT = 9875;
 
+            std::unique_ptr<std::thread> m_pThread = nullptr;
         };
 };
 

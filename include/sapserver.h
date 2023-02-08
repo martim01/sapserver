@@ -23,7 +23,7 @@ namespace pml
             void RemoveSender(const IpAddress& localAddress);
             void RemoveAllSenders();
 
-            void AddReceiver(const IpAddress& multicastAddress);
+            void AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress = IpAddress("0.0.0.0"));
             void RemoveReceiver(const IpAddress& multicastAddress);
 
             void Stop();
