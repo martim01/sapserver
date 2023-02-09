@@ -12,7 +12,7 @@ namespace pml
     class SAP_EXPORT SapServer
     {
         public:
-            SapServer(std::shared_ptr<Handler> pHandler);
+            SapServer(std::shared_ptr<Handler> pHandler, bool bThreaded);
             ~SapServer();
             void Run();
 

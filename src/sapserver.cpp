@@ -4,8 +4,8 @@
 
 using namespace pml;
 
-SapServer::SapServer(std::shared_ptr<Handler> pHandler) :
-    m_pImpl(std::unique_ptr<SapServerImpl>(new SapServerImpl(pHandler)))
+SapServer::SapServer(std::shared_ptr<Handler> pHandler, bool bThreaded) :
+    m_pImpl(std::unique_ptr<SapServerImpl>(new SapServerImpl(pHandler, bThreaded)))
 {
 
 }

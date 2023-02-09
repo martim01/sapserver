@@ -14,7 +14,7 @@ namespace pml
     class SapServerImpl
     {
         public:
-            SapServerImpl(std::shared_ptr<Handler> pHandler);
+            SapServerImpl(std::shared_ptr<Handler> pHandler, bool bThreaded);
             ~SapServerImpl();
             void Run();
 
@@ -34,6 +34,7 @@ namespace pml
             bool IsStopped();
 
         private:
+            void RunContext();
             asio::io_context m_context;
             unsigned long m_nMessageVersion;
 
@@ -41,6 +42,7 @@ namespace pml
             std::map<std::string, std::unique_ptr<Receiver> > m_mReceivers;
 
             std::shared_ptr<Handler> m_pHandler;
+            bool m_bThreaded;
             static const uint16_t SAP_PORT = 9875;
 
             std::unique_ptr<std::thread> m_pThread = nullptr;

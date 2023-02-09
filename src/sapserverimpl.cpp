@@ -7,7 +7,8 @@
 
 using namespace pml;
 
-SapServerImpl::SapServerImpl(std::shared_ptr<Handler> pHandler) : m_pHandler(pHandler)
+SapServerImpl::SapServerImpl(std::shared_ptr<Handler> pHandler, bool bThreaded) : m_pHandler(pHandler),
+m_bThreaded(bThreaded)
 {
 
 }
@@ -34,7 +35,7 @@ void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::millis
             pairSender.first->second->Run();
         }
 
-        if(IsStopped())
+        if(IsStopped() && m_bThreaded)
         {
             Run();
         }
@@ -107,38 +108,46 @@ void SapServerImpl::RemoveAllSenders()
 
 void SapServerImpl::Run()
 {
-    if(m_pThread == nullptr)
+    if(m_context.stopped())
     {
-        if(m_context.stopped())
-        {
-            pmlLog(LOG_INFO) << "SapServer\t" << "Restart context";
-            m_context.restart();
-        }
+        pmlLog(LOG_INFO) << "SapServer\t" << "Restart context";
+        m_context.restart();
+    }
 
-        m_pThread = std::make_unique<std::thread>([this]()
-        {
-            try
-            {
-                auto work = asio::require(m_context.get_executor(), asio::execution::outstanding_work.tracked);
-                pmlLog(LOG_INFO) << "SapServer\t" << "Run context";
-                m_context.run();
-            }
-            catch (const std::exception& e)
-            {
-                pmlLog(LOG_ERROR) << "SapServer\t Failed to run context: " << e.what();
-            }
-
-            pmlLog(pml::LOG_DEBUG) << "SapServer\tThread finished";
-        });
+    if(m_bThreaded && m_pThread == nullptr)
+    {
+        m_pThread = std::make_unique<std::thread>([this]() {    RunContext();  });
+    }
+    else
+    {
+        m_pThread = nullptr;
+        RunContext();
     }
 }
 
 
+void SapServerImpl::RunContext()
+{
+    try
+    {
+        auto work = asio::require(m_context.get_executor(), asio::execution::outstanding_work.tracked);
+        pmlLog(LOG_INFO) << "SapServer\t" << "Run context";
+        m_context.run();
+        pmlLog(pml::LOG_DEBUG) << "SapServer\tContext stopped";
+    }
+    catch (const std::exception& e)
+    {
+        pmlLog(LOG_ERROR) << "SapServer\t Failed to run context: " << e.what();
+    }
+}
 void SapServerImpl::Stop()
 {
     pmlLog(LOG_INFO) << "SapServer\t" << "Stop context";
     m_context.stop();
-    m_pThread->join();
+    if(m_pThread)
+    {
+        m_pThread->join();
+    }
 }
 
 bool SapServerImpl::IsStopped()
@@ -157,8 +166,7 @@ void SapServerImpl::AddReceiver(const IpAddress& multicastAddress, const IpAddre
     {
         pairReceiver.first->second->Run(asio::ip::make_address(listenAddress.Get()), asio::ip::make_address(multicastAddress.Get()), SAP_PORT);
     }
-
-    if(IsStopped())
+    if(IsStopped() && m_bThreaded)
     {
         Run();
     }
@@ -169,3 +177,4 @@ void SapServerImpl::RemoveReceiver(const IpAddress& multicastAddress)
     pmlLog(LOG_DEBUG) << "SapServer\t" << "RemoveReceiver: " << multicastAddress.Get();
     m_mReceivers.erase(multicastAddress.Get());
 }
+
