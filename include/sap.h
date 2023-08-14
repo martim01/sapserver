@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "sapdlldefine.h"
-
+#include <cstdint>
 namespace pml
 {
     struct SAP_EXPORT sap
