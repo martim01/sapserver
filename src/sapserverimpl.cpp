@@ -148,6 +148,7 @@ void SapServerImpl::Stop()
     {
         m_pThread->join();
     }
+    m_pThread = nullptr;
 }
 
 bool SapServerImpl::IsStopped()
