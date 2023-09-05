@@ -12,7 +12,7 @@ Receiver::Receiver(asio::io_context& io_context, std::shared_ptr<Parser> pParser
 void Receiver::Run(const asio::ip::address& listen_address, const asio::ip::address& multicast_address, unsigned int nPort)
 {
     // Create the socket so that multiple may be bound to the same address.
-    asio::ip::udp::endpoint listen_endpoint(listen_address, nPort);
+    asio::ip::udp::endpoint listen_endpoint(asio::ip::make_address("0.0.0.0"), nPort);
 
     std::error_code ec;
     m_socket.open(listen_endpoint.protocol(), ec);
@@ -22,9 +22,17 @@ void Receiver::Run(const asio::ip::address& listen_address, const asio::ip::addr
         m_socket.bind(listen_endpoint);
 
         // Join the multicast group.
-        m_socket.set_option(asio::ip::multicast::join_group(multicast_address));
-
-        do_receive();
+        asio::ip::address_v4 addr = listen_address.to_v4();
+        auto multiAddr = multicast_address.to_v4();
+        m_socket.set_option(asio::ip::multicast::join_group(multiAddr, addr), ec);
+        if(ec)
+        {
+            pmlLog(pml::LOG_CRITICAL) << "SapServer\t" << "Receiver [" << nPort << "]: Can't join group: " << ec;
+        }
+        else
+        {
+            do_receive();
+        }
     }
     else
     {
