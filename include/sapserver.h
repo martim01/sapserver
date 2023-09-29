@@ -6,30 +6,36 @@
 
 namespace pml
 {
-    class Handler;
-    class SapServerImpl;
-
-    class SAP_EXPORT SapServer
+    namespace sap
     {
-        public:
-            SapServer(std::shared_ptr<Handler> pHandler, bool bThreaded=true);
-            ~SapServer();
-            void Run();
+        class Handler;
+        class SapServerImpl;
+
+        class SAP_EXPORT Server
+        {
+            public:
+                Server(std::shared_ptr<Handler> pHandler, bool bThreaded=true);
+                ~Server();
+                void Run();
 
 
-            void AddSender(const IpAddress& localAddress, std::chrono::milliseconds delay, const std::string& sSDP);
-            void SetSenderDelay(const IpAddress& localAddress, std::chrono::milliseconds delay);
-            void SetSenderSDP(const IpAddress& localAddress, const std::string& sSDP);
-            void RemoveSender(const IpAddress& localAddress);
-            void RemoveAllSenders();
+                void AddSender(const IpAddress& localAddress, std::chrono::milliseconds delay = std::chrono::milliseconds(30000), const std::string& sSDP="");
 
-            void AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress = IpAddress("0.0.0.0"));
-            void RemoveReceiver(const IpAddress& multicastAddress);
+                void SetSenderDelay(const IpAddress& localAddress, std::chrono::milliseconds delay);
+                void RemoveSender(const IpAddress& localAddress);
+                void RemoveAllSenders();
 
-            void Stop();
-            bool IsStopped();
+                void AddSdp(const IpAddress& localAddress, const std::string& sSDP);
+                void RemoveSdp(const IpAddress& localAddress, const std::string& sSDP);
 
-        private:
-            std::unique_ptr<SapServerImpl> m_pImpl;
-        };
-};
+                void AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress = IpAddress("0.0.0.0"));
+                void RemoveReceiver(const IpAddress& multicastAddress);
+
+                void Stop();
+                bool IsStopped();
+
+            private:
+                std::unique_ptr<SapServerImpl> m_pImpl;
+            };
+    }
+}

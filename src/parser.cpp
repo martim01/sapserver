@@ -5,7 +5,7 @@
 #include "asio.hpp"
 
 
-using namespace pml;
+using namespace pml::sap;
 
 
 void Parser::ParseMessage(const std::string& sSenderIp, std::vector<unsigned char> vMessage)

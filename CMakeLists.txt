@@ -59,7 +59,7 @@ target_include_directories(sapserver PUBLIC ${DIR_ASIO}/asio/include)
 
 
 
-list(APPEND flags "-fPIC" "-Wall" "-fpermissive"  "-std=c++14")
+list(APPEND flags "-fPIC" "-Wall" "-fpermissive"  "-std=c++17")
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
    list(APPEND flags "-O3")

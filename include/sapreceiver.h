@@ -3,23 +3,26 @@
 
 namespace pml
 {
-    class Parser;
-
-    class Receiver
+    namespace sap
     {
-    public:
-        Receiver(asio::io_context& io_context, std::shared_ptr<Parser> pParser);
+        class Parser;
 
-        void Run(const asio::ip::address& listen_address, const asio::ip::address& multicast_address, unsigned int nPort);
+        class Receiver
+        {
+        public:
+            Receiver(asio::io_context& io_context, std::shared_ptr<Parser> pParser);
 
-    private:
-        void do_receive();
+            void Run(const asio::ip::address& listen_address, const asio::ip::address& multicast_address, unsigned int nPort);
 
-        asio::ip::udp::socket m_socket;
-        asio::ip::udp::endpoint m_sender_endpoint;
-        std::array<unsigned char, 1024> m_data;
+        private:
+            void do_receive();
 
-        std::shared_ptr<Parser> m_pParser;
-    };
-};
+            asio::ip::udp::socket m_socket;
+            asio::ip::udp::endpoint m_sender_endpoint;
+            std::array<unsigned char, 1024> m_data;
+
+            std::shared_ptr<Parser> m_pParser;
+        };
+    }
+}
 

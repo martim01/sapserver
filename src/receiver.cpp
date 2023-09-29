@@ -2,7 +2,7 @@
 #include "log.h"
 #include "sapparser.h"
 
-using namespace pml;
+using namespace pml::sap;
 
 Receiver::Receiver(asio::io_context& io_context, std::shared_ptr<Parser> pParser) : m_socket(io_context), m_pParser(pParser)
 {

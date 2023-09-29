@@ -5,7 +5,7 @@
 #include "sapreceiver.h"
 #include "log.h"
 
-using namespace pml;
+using namespace pml::sap;
 
 SapServerImpl::SapServerImpl(std::shared_ptr<Handler> pHandler, bool bThreaded) : m_pHandler(pHandler),
 m_bThreaded(bThreaded)
@@ -25,10 +25,13 @@ void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::millis
 
     try
     {
-        auto pairSender = m_mSenders.insert(std::make_pair(localAddress.Get(), std::unique_ptr<Sender>(new Sender( m_context, localAddress, asio::ip::make_address("239.255.255.255"), SAP_PORT))));
+        auto pairSender = m_mSenders.try_emplace(localAddress.Get(), std::unique_ptr<Sender>(new Sender( m_context, localAddress, asio::ip::make_address("239.255.255.255"), SAP_PORT)));
 
         pairSender.first->second->SetDelay(delay);
-        pairSender.first->second->SetSDP(sSDP);
+        if(sSDP.empty() == false)
+        {
+            pairSender.first->second->AddSdp(sSDP);
+        }
 
         if(pairSender.second)
         {
@@ -46,11 +49,31 @@ void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::millis
     }
 }
 
+void SapServerImpl::AddSdp(const IpAddress& localAddress, const std::string& sSdp)
+{
+    pmlLog(pml::LOG_DEBUG) << "SapServerImpl::AddSdp\t" << localAddress << "\t" << sSdp;
+    if(auto itSender = m_mSenders.find(localAddress.Get()); itSender != m_mSenders.end())
+    {
+        itSender->second->AddSdp(sSdp);
+    }
+    else
+    {
+        AddSender(localAddress, std::chrono::milliseconds(30000), sSdp);
+    }
+}
+
+void SapServerImpl::RemoveSdp(const IpAddress& localAddress, const std::string& sSdp)
+{
+    if(auto itSender = m_mSenders.find(localAddress.Get()); itSender != m_mSenders.end())
+    {
+        itSender->second->RemoveSdp(sSdp);
+    }
+}
+
 void SapServerImpl::SetSenderDelay(const IpAddress& localAddress, std::chrono::milliseconds delay)
 {
     pmlLog(LOG_DEBUG) << "SapServer\t" << "SetSenderDelay: " << localAddress.Get();
-    auto itSender = m_mSenders.find(localAddress.Get());
-    if(itSender != m_mSenders.end())
+    if(auto itSender = m_mSenders.find(localAddress.Get()); itSender != m_mSenders.end())
     {
         itSender->second->SetDelay(delay);
         pmlLog(LOG_DEBUG) << delay.count() << "ms";
@@ -62,29 +85,12 @@ void SapServerImpl::SetSenderDelay(const IpAddress& localAddress, std::chrono::m
 
 }
 
-void SapServerImpl::SetSenderSDP(const IpAddress& localAddress, const std::string& sSDP)
-{
-    pmlLog(LOG_DEBUG) << "SapServer\t" << "SetSenderDelay: " << localAddress.Get();
-
-    auto itSender = m_mSenders.find(localAddress.Get());
-    if(itSender != m_mSenders.end())
-    {
-        itSender->second->SetSDP(sSDP);
-        pmlLog(LOG_DEBUG) << sSDP;
-    }
-    else
-    {
-        pmlLog(LOG_WARN) << "Sender not found";
-    }
-}
 
 void SapServerImpl::RemoveSender(const IpAddress& localAddress)
 {
     pmlLog(LOG_DEBUG) << "SapServer\t" << "RemoveSender: " << localAddress.Get();
-    auto itSender = m_mSenders.find(localAddress.Get());
-    if(itSender != m_mSenders.end())
+    if(auto itSender = m_mSenders.find(localAddress.Get()); itSender != m_mSenders.end())
     {
-        itSender->second->Remove();
         m_mSenders.erase(localAddress.Get());
         pmlLog(LOG_DEBUG);
     }
@@ -97,10 +103,6 @@ void SapServerImpl::RemoveSender(const IpAddress& localAddress)
 void SapServerImpl::RemoveAllSenders()
 {
     pmlLog(LOG_DEBUG) << "SapServer\t" << "RemoveAllSenders";
-    for(auto itSender = m_mSenders.begin(); itSender != m_mSenders.end(); ++itSender)
-    {
-        itSender->second->Remove();
-    }
     m_mSenders.clear();
 
 }
@@ -161,7 +163,7 @@ void SapServerImpl::AddReceiver(const IpAddress& multicastAddress, const IpAddre
 {
     pmlLog(LOG_DEBUG) << "SapServer\t" << "AddReceiver: " << multicastAddress.Get();
 
-    auto pairReceiver = m_mReceivers.insert(std::make_pair(multicastAddress.Get(), std::unique_ptr<Receiver>( new Receiver(m_context, std::make_shared<Parser>(m_pHandler)))));
+    auto pairReceiver = m_mReceivers.try_emplace(multicastAddress.Get(), std::unique_ptr<Receiver>( new Receiver(m_context, std::make_shared<Parser>(m_pHandler))));
 
     if(pairReceiver.second)
     {

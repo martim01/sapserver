@@ -6,45 +6,65 @@
 #include <chrono>
 #include "sapnamedtype.h"
 #include <mutex>
+#include <list>
 
 namespace pml
 {
-
-    class Sender
+    namespace sap
     {
-        public:
+        class Sender
+        {
+            public:
 
-            Sender(asio::io_context& io_context, const IpAddress& outboundIpAddress, const asio::ip::address& multicast_address, unsigned short nPort);
+                Sender(asio::io_context& io_context, const IpAddress& outboundIpAddress, const asio::ip::address& multicast_address, unsigned short nPort);
+                ~Sender();
 
-            void SetDelay(std::chrono::milliseconds delay);
-            void SetSDP(const std::string& sSDP);
-            void Run();
-            void Remove();
+                void SetDelay(std::chrono::milliseconds delay);
+                void Run();
+                            
+                void AddSdp(const std::string& sSDP);
+                void RemoveSdp(const std::string& sSDP);
 
-        protected:
-        private:
-            void do_send();
-            void do_timeout();
-            void CreateMessage(const std::string& sSDP);
+            protected:
+            private:
+                void do_send();
+                void do_timeout();
+                std::vector<uint8_t> CreateMessage();
 
-            const std::chrono::milliseconds& GetDelay();
-            const std::vector<uint8_t> GetMessage();
+                bool CheckForMessages();
+                
 
-            IpAddress m_outboundIpAddress;
-            asio::ip::udp::endpoint m_endpoint;
-            asio::ip::udp::socket m_socket;
-            asio::steady_timer m_timer;
+                const std::chrono::milliseconds& GetDelay();
+                
+                void CalculateGap();
 
-            unsigned short m_nSequence;
-            std::chrono::milliseconds m_delay;
+                IpAddress m_outboundIpAddress;
+                asio::ip::udp::endpoint m_endpoint;
+                asio::ip::udp::socket m_socket;
+                asio::steady_timer m_timer;
 
-            std::vector<uint8_t> m_vMessage;
-            std::mutex m_mutex;
-            unsigned long m_nMessageVersion;
+                std::chrono::milliseconds m_delay;
+                std::chrono::milliseconds m_gap;
 
-            std::string m_sUpdatedSDP;
-            static const std::string STR_MIME;
-    };
 
-};
+                std::mutex m_mutex;
+                
+                std::string m_sUpdatedSDP;
+                static const std::string STR_MIME;
+
+                struct sdpMessage
+                {
+                    std::string sSdp;
+                    unsigned long nMessageVersion = 0;
+                    bool bRemove = false;
+                };
+
+                std::vector<uint8_t> CreateMessage(sdpMessage& msg);
+
+                std::list<sdpMessage> m_lstSdp;
+                std::list<sdpMessage>::iterator m_itToSend;
+                
+        };
+    }
+}
 

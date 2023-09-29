@@ -3,7 +3,7 @@
 #include "sap.h"
 #include <iostream>
 
-using namespace pml;
+using namespace pml::sap;
 
 void StdHandler::SapMessage(const sap& aMessage)
 {

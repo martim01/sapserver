@@ -5,19 +5,21 @@
 
 namespace sapserver
 {
-    class Message
+    namespace sap
     {
-        public:
-            Message(unsigned short nVersion, const std::string& sIp, const std::string& sSDP);
-            ~Message();
-            const std::vector<uint8_t>& GetFinalMessage() const
-            {
-                return m_vMsg;
-            }
-      private:
-        std::vector<uint8_t> m_vMsg;
-        unsigned short m_nVersion;
-    };
+        class Message
+        {
+            public:
+                Message(unsigned short nVersion, const std::string& sIp, const std::string& sSDP);
+                ~Message();
+                const std::vector<uint8_t>& GetFinalMessage() const
+                {
+                    return m_vMsg;
+                }
+        private:
+            std::vector<uint8_t> m_vMsg;
+            unsigned short m_nVersion;
+        };
 
-
-};
+    }
+}

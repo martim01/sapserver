@@ -3,18 +3,21 @@
 
 namespace pml
 {
-    struct sap;
-
-    class SAP_EXPORT Handler
+    namespace sap
     {
-        public:
+        struct sap;
 
-            virtual void SapMessage(const sap& aMessage)=0;
-    };
+        class SAP_EXPORT Handler
+        {
+            public:
 
-    class SAP_EXPORT StdHandler : public Handler
-    {
-        public:
-            void SapMessage(const sap& aMessage) override;
-    };
-};
+                virtual void SapMessage(const sap& aMessage)=0;
+        };
+
+        class SAP_EXPORT StdHandler : public Handler
+        {
+            public:
+                void SapMessage(const sap& aMessage) override;
+        };
+    }
+}

@@ -6,17 +6,20 @@
 
 namespace pml
 {
-    class Handler;
-
-    class Parser
+    namespace sap
     {
-        public:
-            Parser(std::shared_ptr<Handler> pHandler) : m_pHandler(pHandler){}
+        class Handler;
 
-            void ParseMessage(const std::string& sSenderIp, std::vector<unsigned char> vMessage);
+        class Parser
+        {
+            public:
+                Parser(std::shared_ptr<Handler> pHandler) : m_pHandler(pHandler){}
 
-        protected:
-            std::shared_ptr<Handler> m_pHandler;
-    };
-};
+                void ParseMessage(const std::string& sSenderIp, std::vector<unsigned char> vMessage);
+
+            protected:
+                std::shared_ptr<Handler> m_pHandler;
+        };
+    }
+}
 
