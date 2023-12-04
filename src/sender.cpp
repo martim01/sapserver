@@ -41,7 +41,7 @@ void Sender::Run()
     }
     else
     {
-        pmlLog(LOG_ERROR) << "SapServer\t" << "Sender Run option failed: " << ec;
+        pmlLog(LOG_ERROR, "pml::sapserver") << "Sender Run option failed: " << ec;
         std::cout << ec;
     }
 }
@@ -64,7 +64,7 @@ void Sender::do_send()
             }
             else
             {
-                pmlLog(LOG_ERROR) << "SapServer\t" << "Sender Send failed: " << ec;
+                pmlLog(LOG_ERROR, "pml::sapserver") <<  "Sender Send failed: " << ec;
             }
         });
     }
@@ -77,7 +77,7 @@ void Sender::do_send()
 
 void Sender::AddSdp(const std::string& sSDP)
 {
-    pmlLog(pml::LOG_DEBUG) << "Sap::Sender AddSdp\t" << sSDP;
+    pmlLog(pml::LOG_DEBUG, "pml::sapserver") << "AddSdp\t" << sSDP;
     for(auto& msg : m_lstSdp)
     {
         if(msg.sSdp == sSDP)
@@ -184,7 +184,7 @@ void Sender::do_timeout()
         }
         else
         {
-            pmlLog(LOG_ERROR) << "SapServer\t" << "Sender Timeout failed: " << ec;
+            pmlLog(LOG_ERROR, "pml::sapserver") << "Sender Timeout failed: " << ec;
         }
     });
 }
