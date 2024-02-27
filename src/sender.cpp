@@ -41,8 +41,7 @@ void Sender::Run()
     }
     else
     {
-        pmlLog(LOG_ERROR, "pml::sapserver") << "Sender Run option failed: " << ec;
-        std::cout << ec;
+        pmlLog(LOG_ERROR, "pml::sapserver") << "Sender Run option failed: " << ec.message() << "\t" << m_outboundIpAddress.Get();
     }
 }
 bool Sender::CheckForMessages()
