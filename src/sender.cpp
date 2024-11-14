@@ -33,7 +33,7 @@ Sender::~Sender()
 void Sender::Run()
 {
     std::error_code ec;
-    asio::ip::multicast::outbound_interface option(asio::ip::address_v4::from_string(m_outboundIpAddress.Get(), ec));
+    asio::ip::multicast::outbound_interface option(asio::ip::make_address_v4(m_outboundIpAddress.Get(), ec));
     if(!ec)
     {
         m_socket.set_option(option);
