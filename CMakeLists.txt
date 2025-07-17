@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 project(sapserver LANGUAGES CXX VERSION 1.2.1)
-
+include(FetchContent)
 message(STATUS "----pml/sapserver ----")
 
 execute_process(COMMAND ${CMAKE_COMMAND} -DNAMESPACE=sapserver -DMAJOR=${PROJECT_VERSION_MAJOR} -DMINOR=${PROJECT_VERSION_MINOR} -DPATCH=${PROJECT_VERSION_PATCH} -P ${CMAKE_CURRENT_SOURCE_DIR}/version.cmake)
@@ -17,7 +17,16 @@ target_include_directories(sapserver PUBLIC ${CMAKE_BINARY_DIR}/include)
 #Get log
 FetchContent_Declare(log GIT_REPOSITORY "https://github.com/martim01/log.git"  SOURCE_DIR ${DIR_LOG})
 FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.git"  SOURCE_DIR ${DIR_ASIO})
-FetchContent_MakeAvailable(log asio)
+
+FetchContent_GetProperties(log)
+if(NOT log_POPULATED)
+	FetchContent_MakeAvailable(asio)
+endif()
+
+FetchContent_GetProperties(asio)
+if(NOT asio_POPULATED)
+	FetchContent_Populate(asio)
+endif()
 
 
 target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
