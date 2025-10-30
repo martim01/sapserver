@@ -48,7 +48,6 @@ endif()
 target_compile_options(sapserver PRIVATE ${flags})
 target_compile_definitions(sapserver PUBLIC ASIO_STANDALONE)
 
-target_link_libraries(sapserver optimized pml_log debug pml_logd)
 target_compile_options(sapserver PRIVATE ${flags})
 
 
