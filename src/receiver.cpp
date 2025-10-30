@@ -1,5 +1,7 @@
 #include "sapreceiver.h"
+
 #include "log.h"
+
 #include "sapparser.h"
 
 using namespace pml::sap;
@@ -36,27 +38,27 @@ void Receiver::Run(const asio::ip::address& listen_address, const asio::ip::addr
     }
     else
     {
-        pmlLog(LOG_ERROR, "pml::sapserver") << "Receiver Run failed to open socket" << ec;
+        pml::log::log(pml::log::Level::kError, "pml::sapserver") << "Receiver Run failed to open socket" << ec;
     }
 }
 
 
 void Receiver::do_receive()
 {
-    pmlLog(LOG_TRACE, "pml::sapserver") << "Receiver do_receive";
+    pml::log::log(pml::log::Level::kTrace, "pml::sapserver") << "Receiver do_receive";
 
     m_socket.async_receive_from(asio::buffer(m_data), m_sender_endpoint,
         [this](std::error_code ec, std::size_t length)
     {
         if (!ec)
         {
-            pmlLog(LOG_TRACE, "pml::sapserver") <<  "Receiver do_receive: received";
+            pml::log::log(pml::log::Level::kTrace, "pml::sapserver") <<  "Receiver do_receive: received";
             m_pParser->ParseMessage(m_sender_endpoint.address().to_string(), std::vector<unsigned char>(m_data.begin(), m_data.begin()+length));
             do_receive();
         }
         else
         {
-            pmlLog(LOG_ERROR, "pml::sapserver") <<  "Receiver receive failed :" << ec;
+            pml::log::log(pml::log::Level::kError, "pml::sapserver") <<  "Receiver receive failed :" << ec;
         }
     });
 }

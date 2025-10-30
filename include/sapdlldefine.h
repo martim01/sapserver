@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PML_SAPSERVER_DLL_H
+#define PML_SAPSERVER_DLL_H
 
 #ifdef __WIN32__
     #ifdef SAP_DLL
@@ -10,3 +11,4 @@
 #define SAP_EXPORT
 #endif
 
+#endif

@@ -1,28 +1,31 @@
-#include "asio.hpp"
+#ifndef PML_SAPSERVER_RECEIVER_H
+#define PML_SAPSERVER_RECEIVER_H
+
 #include <iostream>
 
-namespace pml
+#include "asio.hpp"
+
+namespace pml::sap
 {
-    namespace sap
+    class Parser;
+
+    class Receiver
     {
-        class Parser;
+    public:
+        Receiver(asio::io_context& io_context, std::shared_ptr<Parser> pParser);
 
-        class Receiver
-        {
-        public:
-            Receiver(asio::io_context& io_context, std::shared_ptr<Parser> pParser);
+        void Run(const asio::ip::address& listen_address, const asio::ip::address& multicast_address, unsigned int nPort);
 
-            void Run(const asio::ip::address& listen_address, const asio::ip::address& multicast_address, unsigned int nPort);
+    private:
+        void do_receive();
 
-        private:
-            void do_receive();
+        asio::ip::udp::socket m_socket;
+        asio::ip::udp::endpoint m_sender_endpoint;
+        std::array<unsigned char, 1024> m_data;
 
-            asio::ip::udp::socket m_socket;
-            asio::ip::udp::endpoint m_sender_endpoint;
-            std::array<unsigned char, 1024> m_data;
-
-            std::shared_ptr<Parser> m_pParser;
-        };
-    }
+        std::shared_ptr<Parser> m_pParser;
+    };
 }
+
+#endif
 

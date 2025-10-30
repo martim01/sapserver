@@ -1,41 +1,45 @@
-#pragma once
+#ifndef PML_SAPSERVER_SERVER_H
+#define PML_SAPSERVER_SERVER_H
+
+#include <chrono>
+#include <memory>
+
 #include "sapdlldefine.h"
 #include "sapnamedtype.h"
-#include <memory>
-#include <chrono>
 
-namespace pml
+
+
+namespace pml::sap
 {
-    namespace sap
-    {
-        class Handler;
-        class SapServerImpl;
+class Handler;
+class SapServerImpl;
 
-        class SAP_EXPORT Server
-        {
-            public:
-                Server(std::shared_ptr<Handler> pHandler, bool bThreaded=true);
-                ~Server();
-                void Run();
+class SAP_EXPORT Server
+{
+    public:
+        Server(std::shared_ptr<Handler> pHandler, bool bThreaded=true);
+        ~Server();
+        void Run();
 
 
-                void AddSender(const IpAddress& localAddress, std::chrono::milliseconds delay = std::chrono::milliseconds(30000), const std::string& sSDP="");
+        void AddSender(const IpAddress& localAddress, std::chrono::milliseconds delay = std::chrono::milliseconds(30000), const std::string& sSDP="");
 
-                void SetSenderDelay(const IpAddress& localAddress, std::chrono::milliseconds delay);
-                void RemoveSender(const IpAddress& localAddress);
-                void RemoveAllSenders();
+        void SetSenderDelay(const IpAddress& localAddress, std::chrono::milliseconds delay);
+        void RemoveSender(const IpAddress& localAddress);
+        void RemoveAllSenders();
 
-                void AddSdp(const IpAddress& localAddress, const std::string& sSDP);
-                void RemoveSdp(const IpAddress& localAddress, const std::string& sSDP);
+        void AddSdp(const IpAddress& localAddress, const std::string& sSDP);
+        void RemoveSdp(const IpAddress& localAddress, const std::string& sSDP);
 
-                void AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress = IpAddress("0.0.0.0"));
-                void RemoveReceiver(const IpAddress& multicastAddress);
+        void AddReceiver(const IpAddress& multicastAddress, const IpAddress& listenAddress = IpAddress("0.0.0.0"));
+        void RemoveReceiver(const IpAddress& multicastAddress);
 
-                void Stop();
-                bool IsStopped();
+        void Stop();
+        bool IsStopped();
 
-            private:
-                std::unique_ptr<SapServerImpl> m_pImpl;
-            };
-    }
+    private:
+        std::unique_ptr<SapServerImpl> m_pImpl;
+    };
 }
+
+#endif

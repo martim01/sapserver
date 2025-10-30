@@ -1,9 +1,11 @@
 #include "sapsender.h"
+
 #include <cmath>
 
 #ifdef __GNU__
 #include <linux/socket.h>
 #endif // __GNU__
+
 #include "log.h"
 
 using namespace pml::sap;
@@ -41,7 +43,7 @@ void Sender::Run()
     }
     else
     {
-        pmlLog(LOG_ERROR, "pml::sapserver") << "Sender Run option failed: " << ec.message() << "\t" << m_outboundIpAddress.Get();
+        pml::log::log(pml::log::Level::kError, "pml::sapserver") << "Sender Run option failed: " << ec.message() << "\t" << m_outboundIpAddress.Get();
     }
 }
 bool Sender::CheckForMessages()
@@ -63,7 +65,7 @@ void Sender::do_send()
             }
             else
             {
-                pmlLog(LOG_ERROR, "pml::sapserver") <<  "Sender Send failed: " << ec;
+                pml::log::log(pml::log::Level::kError, "pml::sapserver") <<  "Sender Send failed: " << ec;
             }
         });
     }
@@ -183,7 +185,7 @@ void Sender::do_timeout()
         }
         else
         {
-            pmlLog(LOG_ERROR, "pml::sapserver") << "Sender Timeout failed: " << ec;
+            pml::log::log(pml::log::Level::kError, "pml::sapserver") << "Sender Timeout failed: " << ec;
         }
     });
 }

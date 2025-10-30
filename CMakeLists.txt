@@ -3,7 +3,7 @@ project(sapserver LANGUAGES CXX VERSION 1.2.1)
 include(FetchContent)
 message(STATUS "----pml/sapserver ----")
 
-execute_process(COMMAND ${CMAKE_COMMAND} -DNAMESPACE=sapserver -DMAJOR=${PROJECT_VERSION_MAJOR} -DMINOR=${PROJECT_VERSION_MINOR} -DPATCH=${PROJECT_VERSION_PATCH} -P ${CMAKE_CURRENT_SOURCE_DIR}/version.cmake)
+execute_process(COMMAND ${CMAKE_COMMAND} -DNAMESPACE=sapserver -DMAJOR=${PROJECT_VERSION_MAJOR} -DMINOR=${PROJECT_VERSION_MINOR} -DPATCH=${PROJECT_VERSION_PATCH} -DOUTPUT=${CMAKE_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/version.cmake)
 
 SET(DIR_BASE ${CMAKE_SOURCE_DIR} CACHE STRING "base location for external libraries' source")
 SET(DIR_LOG ${DIR_BASE}/external/log CACHE STRING "location of pml log")

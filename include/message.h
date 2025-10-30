@@ -1,25 +1,27 @@
-#pragma once
+#ifndef PML_SAPSERVER_MESSAGE_H
+#define PML_SAPSERVER_MESSAGE_H
+
 #include <stdint.h>
-#include <vector>
+
 #include <string>
+#include <vector>
 
-namespace sapserver
+
+namespace pml::sap
 {
-    namespace sap
+    class Message
     {
-        class Message
-        {
-            public:
-                Message(unsigned short nVersion, const std::string& sIp, const std::string& sSDP);
-                ~Message();
-                const std::vector<uint8_t>& GetFinalMessage() const
-                {
-                    return m_vMsg;
-                }
-        private:
-            std::vector<uint8_t> m_vMsg;
-            unsigned short m_nVersion;
-        };
-
-    }
+        public:
+            Message(unsigned short nVersion, const std::string& sIp, const std::string& sSDP);
+            ~Message();
+            const std::vector<uint8_t>& GetFinalMessage() const
+            {
+                return m_vMsg;
+            }
+    private:
+        std::vector<uint8_t> m_vMsg;
+        unsigned short m_nVersion;
+    };
 }
+
+#endif
