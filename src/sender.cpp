@@ -10,7 +10,7 @@
 
 using namespace pml::sap;
 
-const std::string Sender::STR_MIME = "application/sdp";
+const std::string Sender::kMime = "application/sdp";
 
 Sender::Sender(asio::io_context& io_context, const IpAddress& outboundIpAddress, const asio::ip::address& multicast_address,
         unsigned short nPort) :
@@ -159,7 +159,7 @@ std::vector<uint8_t> Sender::CreateMessage(Sender::sdpMessage& msg)
     vMessage.push_back((nIpServer >> 16) & 0xFF);
     vMessage.push_back((nIpServer >> 24) & 0xFF);
 
-    std::copy(STR_MIME.begin(), STR_MIME.end(), std::back_inserter(vMessage));
+    std::copy(kMime.begin(), kMime.end(), std::back_inserter(vMessage));
     vMessage.push_back(0x00); //null terminated string
 
     std::copy(msg.sSdp.begin(), msg.sSdp.end(), std::back_inserter(vMessage));

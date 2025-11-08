@@ -1,7 +1,7 @@
 #ifndef PML_SAPSERVER_DLL_H
 #define PML_SAPSERVER_DLL_H
 
-#ifdef __WIN32__
+#ifdef __WIN32
     #ifdef SAP_DLL
         #define SAP_EXPORT __declspec(dllexport)
     #else

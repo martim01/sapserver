@@ -31,12 +31,12 @@ namespace pml::sap
 
         private:
             
-        struct sdpMessage
-            {
-                std::string sSdp;
-                unsigned long nMessageVersion = 0;
-                bool bRemove = false;
-            };
+            struct sdpMessage
+                {
+                    std::string sSdp;
+                    unsigned long nMessageVersion = 0;
+                    bool bRemove = false;
+                };
         
             void do_send();
             void do_timeout();
@@ -61,7 +61,7 @@ namespace pml::sap
             std::mutex m_mutex;
             
             std::string m_sUpdatedSDP;
-            static const std::string STR_MIME;
+            static const std::string kMime;
 
             
 
