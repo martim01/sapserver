@@ -18,14 +18,24 @@ target_include_directories(sapserver PUBLIC ${CMAKE_BINARY_DIR}/include)
 FetchContent_Declare(log GIT_REPOSITORY "https://github.com/martim01/log.git"  SOURCE_DIR ${DIR_LOG})
 FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.git"  SOURCE_DIR ${DIR_ASIO})
 
-FetchContent_GetProperties(log)
-if(NOT log_POPULATED)
-	FetchContent_MakeAvailable(asio)
+#Get log
+if(EXISTS ${DIR_LOG}/CMakeLists.txt)
+    message(STATUS "Using local external/log at ${DIR_LOG}")
+    add_subdirectory(${DIR_LOG})
+else()
+    message(STATUS "Fetching external/log into ${DIR_LOG}")
+    FetchContent_Declare(log GIT_REPOSITORY "https://github.com/martim01/log.git" SOURCE_DIR ${DIR_LOG})
+    FetchContent_MakeAvailable(log)
 endif()
 
-FetchContent_GetProperties(asio)
-if(NOT asio_POPULATED)
-	FetchContent_Populate(asio)
+#Get asio
+if(EXISTS ${DIR_ASIO}/include/asio.hpp)
+    message(STATUS "Using local external/asio at ${DIR_ASIO}")
+    add_subdirectory(${DIR_ASIO})
+else()
+    message(STATUS "Fetching external/asio into ${DIR_ASIO}")
+    FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.git" SOURCE_DIR ${DIR_ASIO})
+    FetchContent_MakeAvailable(asio)
 endif()
 
 
@@ -39,10 +49,10 @@ list(APPEND flags "-fPIC" "-Wall" "-fpermissive"  "-std=c++17")
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
    list(APPEND flags "-O3")
-   target_compile_definitions(sapserver PUBLIC NDEBUG DLL_EXPORTS _MSL_STDINT_H)
+   target_compile_definitions(sapserver PUBLIC NDEBUG SAP_EXPORT _MSL_STDINT_H)
 else()
    list(APPEND flags "-g")
-   target_compile_definitions(sapserver PUBLIC DEBUG DLL_EXPORTS _MSL_STDINT_H)
+   target_compile_definitions(sapserver PUBLIC DEBUG SAP_EXPORT _MSL_STDINT_H)
 endif()
 
 target_compile_options(sapserver PRIVATE ${flags})
@@ -63,5 +73,6 @@ set_target_properties(sapserver PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOUR
 
 #linux specific
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-	install(TARGETS sapserver LIBRARY DESTINATION /usr/local/lib)
+   set(CMAKE_INSTALL_PREFIX "/usr/local")
+	install(TARGETS sapserver LIBRARY DESTINATION lib) 
 endif()
