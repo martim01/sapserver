@@ -21,7 +21,6 @@ FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.
 #Get log
 if(EXISTS ${DIR_LOG}/CMakeLists.txt)
     message(STATUS "Using local external/log at ${DIR_LOG}")
-    add_subdirectory(${DIR_LOG})
 else()
     message(STATUS "Fetching external/log into ${DIR_LOG}")
     FetchContent_Declare(log GIT_REPOSITORY "https://github.com/martim01/log.git" SOURCE_DIR ${DIR_LOG})
@@ -31,7 +30,6 @@ endif()
 #Get asio
 if(EXISTS ${DIR_ASIO}/include/asio.hpp)
     message(STATUS "Using local external/asio at ${DIR_ASIO}")
-    add_subdirectory(${DIR_ASIO})
 else()
     message(STATUS "Fetching external/asio into ${DIR_ASIO}")
     FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.git" SOURCE_DIR ${DIR_ASIO})
