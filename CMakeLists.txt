@@ -47,10 +47,10 @@ list(APPEND flags "-fPIC" "-Wall" "-fpermissive"  "-std=c++17")
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
    list(APPEND flags "-O3")
-   target_compile_definitions(sapserver PUBLIC NDEBUG SAP_EXPORT _MSL_STDINT_H)
+   target_compile_definitions(sapserver PUBLIC NDEBUG SAP_DLL _MSL_STDINT_H)
 else()
    list(APPEND flags "-g")
-   target_compile_definitions(sapserver PUBLIC DEBUG SAP_EXPORT _MSL_STDINT_H)
+   target_compile_definitions(sapserver PUBLIC DEBUG SAP_DLL _MSL_STDINT_H)
 endif()
 
 target_compile_options(sapserver PRIVATE ${flags})
