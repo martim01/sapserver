@@ -1,19 +1,27 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 project(sapserver LANGUAGES CXX VERSION 1.2.1)
-include(FetchContent)
+include(addexternal.cmake)
 message(STATUS "----pml/sapserver ----")
 
+<<<<<<< Updated upstream
 execute_process(COMMAND ${CMAKE_COMMAND} -DNAMESPACE=sapserver -DMAJOR=${PROJECT_VERSION_MAJOR} -DMINOR=${PROJECT_VERSION_MINOR} -DPATCH=${PROJECT_VERSION_PATCH} -DOUTPUT=${CMAKE_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/version.cmake)
+=======
+execute_process(COMMAND ${CMAKE_COMMAND} -DNAMESPACE=${PROJECT_NAME} -DMAJOR=${PROJECT_VERSION_MAJOR} -DMINOR=${PROJECT_VERSION_MINOR} -DPATCH=${PROJECT_VERSION_PATCH} -DOUTPUT=${CMAKE_BINARY_DIR} -P ${CMAKE_SOURCE_DIR}/version.cmake)
+>>>>>>> Stashed changes
 
 SET(DIR_BASE ${CMAKE_SOURCE_DIR} CACHE STRING "base location for external libraries' source")
 SET(DIR_LOG ${DIR_BASE}/external/log CACHE STRING "location of pml log")
 SET(DIR_ASIO ${DIR_BASE}/external/asio CACHE STRING "location of asio")
+
+add_external_library(log ${DIR_LOG} "https://github.com/martim01/log.git" "" FALSE)
+add_external_library(asio ${DIR_ASIO} "https://github.com/chriskohlhoff/asio" "" FALSE)
 
 add_library(sapserver SHARED "src/parser.cpp" "src/receiver.cpp" "src/saphandler.cpp" "src/sapserver.cpp" "src/sapserverimpl.cpp" "src/sender.cpp" ${CMAKE_BINARY_DIR}/src/sapserver_version.cpp)
 
 target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(sapserver PUBLIC ${CMAKE_BINARY_DIR}/include)
 
+<<<<<<< Updated upstream
 #Get log
 FetchContent_Declare(log GIT_REPOSITORY "https://github.com/martim01/log.git"  SOURCE_DIR ${DIR_LOG})
 FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.git"  SOURCE_DIR ${DIR_ASIO})
@@ -36,7 +44,10 @@ else()
     FetchContent_MakeAvailable(asio)
 endif()
 
+=======
+>>>>>>> Stashed changes
 
+target_link_directories(sapserver PRIVATE ${CMAKE_SOURCE_DIR}/lib)
 target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
 include_directories(${DIR_LOG}/include)
 target_include_directories(sapserver PUBLIC ${DIR_ASIO}/asio/include)
