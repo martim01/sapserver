@@ -21,7 +21,6 @@ add_library(sapserver SHARED "src/parser.cpp" "src/receiver.cpp" "src/saphandler
 target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(sapserver PUBLIC ${CMAKE_BINARY_DIR}/include)
 
-<<<<<<< Updated upstream
 #Get log
 FetchContent_Declare(log GIT_REPOSITORY "https://github.com/martim01/log.git"  SOURCE_DIR ${DIR_LOG})
 FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio.git"  SOURCE_DIR ${DIR_ASIO})
@@ -44,8 +43,6 @@ else()
     FetchContent_MakeAvailable(asio)
 endif()
 
-=======
->>>>>>> Stashed changes
 
 target_link_directories(sapserver PRIVATE ${CMAKE_SOURCE_DIR}/lib)
 target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
