@@ -9,8 +9,8 @@ SET(DIR_BASE ${CMAKE_SOURCE_DIR} CACHE STRING "base location for external librar
 SET(DIR_LOG ${DIR_BASE}/external/log CACHE STRING "location of pml log")
 SET(DIR_ASIO ${DIR_BASE}/external/asio CACHE STRING "location of asio")
 
-add_external_library(log ${DIR_LOG} "https://github.com/martim01/log.git" "" FALSE)
-add_external_library(asio ${DIR_ASIO} "https://github.com/chriskohlhoff/asio" "" FALSE)
+add_external_library(log ${DIR_LOG} "martim01/log" "" FALSE "CMakeLists.txt")
+add_external_library(asio ${DIR_ASIO} "chriskohlhoff/asio" "" FALSE "README")
 
 add_library(sapserver SHARED "src/parser.cpp" "src/receiver.cpp" "src/saphandler.cpp" "src/sapserver.cpp" "src/sapserverimpl.cpp" "src/sender.cpp" ${CMAKE_BINARY_DIR}/src/sapserver_version.cpp)
 
