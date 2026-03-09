@@ -53,7 +53,7 @@ void SapServerImpl::AddSender(const IpAddress& localAddress, std::chrono::millis
 
 void SapServerImpl::AddSdp(const IpAddress& localAddress, const std::string& sSdp)
 {
-    pmlLog(pml::LOG_DEBUG, "pml::sapserver") << "AddSdp\t" << localAddress << "\t" << sSdp;
+    pml::log::log(pml::log::Level::kDebug, "pml::sapserver") << "AddSdp\t" << localAddress << "\t" << sSdp;
     if(auto itSender = m_mSenders.find(localAddress.Get()); itSender != m_mSenders.end())
     {
         itSender->second->AddSdp(sSdp);
@@ -136,7 +136,7 @@ void SapServerImpl::RunContext()
         auto work = asio::require(m_context.get_executor(), asio::execution::outstanding_work.tracked);
         pml::log::log(pml::log::Level::kInfo, "pml::sapserver") <<  "Run context";
         m_context.run();
-        pmlLog(pml::LOG_DEBUG, "pml::sapserver") << "Context stopped";
+        pml::log::log(pml::log::Level::kDebug, "pml::sapserver") << "Context stopped";
     }
     catch (const std::exception& e)
     {

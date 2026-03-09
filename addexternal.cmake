@@ -2,8 +2,8 @@ include(FetchContent)
 
 function(add_external_library name dir repo tag build file)
 	
-	if(DEFINED ENV{GITHUB_ACTION})
-		SET(GIT_REPO https://$ENV{GH_PAT}@github.com/${repo})
+	if(DEFINED USE_SSH)
+		SET(GIT_REPO git@github.com:${repo}.git)
 	else()
 		SET(GIT_REPO https://github.com/${repo})
 	endif()

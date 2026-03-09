@@ -78,7 +78,7 @@ void Sender::do_send()
 
 void Sender::AddSdp(const std::string& sSDP)
 {
-    pmlLog(pml::LOG_DEBUG, "pml::sapserver") << "AddSdp\t" << sSDP;
+    pml::log::log(pml::log::Level::kDebug, "pml::sapserver") << "AddSdp\t" << sSDP;
     for(auto& msg : m_lstSdp)
     {
         if(msg.sSdp == sSDP)

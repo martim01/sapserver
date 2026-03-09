@@ -29,7 +29,7 @@ void Receiver::Run(const asio::ip::address& listen_address, const asio::ip::addr
         m_socket.set_option(asio::ip::multicast::join_group(multiAddr, addr), ec);
         if(ec)
         {
-            pmlLog(pml::LOG_CRITICAL, "pml::sapserver") << "Receiver [" << nPort << "]: Can't join group: " << ec;
+            pml::log::log(pml::log::Level::kCritical, "pml::sapserver") << "Receiver [" << nPort << "]: Can't join group: " << ec;
         }
         else
         {
