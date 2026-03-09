@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 project(sapserver LANGUAGES CXX VERSION 1.2.1)
-include(addexternal.cmake)
+include(${CMAKE_SOURCE_DIR}/addexternal.cmake)
 message(STATUS "----pml/sapserver ----")
 
 execute_process(COMMAND ${CMAKE_COMMAND} -DNAMESPACE=${PROJECT_NAME} -DMAJOR=${PROJECT_VERSION_MAJOR} -DMINOR=${PROJECT_VERSION_MINOR} -DPATCH=${PROJECT_VERSION_PATCH} -DOUTPUT=${CMAKE_BINARY_DIR} -P ${CMAKE_SOURCE_DIR}/version.cmake)
