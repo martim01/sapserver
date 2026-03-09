@@ -18,7 +18,7 @@ target_include_directories(sapserver PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(sapserver PUBLIC ${CMAKE_BINARY_DIR}/include)
 
 #Get log
-add_external_library(pml_log ${DIR_LOG} "martim01/log.git" "" TRUE "CMakeLists.txt")
+add_external_library(pml_log ${DIR_LOG} "martim01/log.git" "" FALSE "CMakeLists.txt")
 add_external_library(asio ${DIR_ASIO} "chriskohlhoff/asio" "" FALSE "asio.manifest")
 
 
