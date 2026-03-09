@@ -11,7 +11,7 @@ function(add_external_library name dir repo tag build file)
 	message(STATUS "name: '${name}' dir: '${dir}' repo: '${GIT_REPO}' tag: '${tag}' build: '${build}' file: '${file}'")
 
 	if(NOT EXISTS ${dir}/${file})
-		message(STATUS "Cloning ${name} from ${repo} to ${dir}")
+		message(STATUS "Cloning ${name} from ${GIT_REPO} to ${dir}")
 		if(tag)
 			FetchContent_Declare(${name} GIT_REPOSITORY ${GIT_REPO} GIT_TAG ${tag} SOURCE_DIR ${dir})
 		else()
